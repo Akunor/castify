@@ -620,7 +620,6 @@ cp .env.example .env.local
 - **Recommended**: Deploy to Vercel for seamless Next.js integration
 - Connect to your Supabase project
 - Environment variables are set in Vercel dashboard
-
 ---
 
 **This outline provides a comprehensive roadmap for building the Castify prototype with Next.js and Supabase. Start with Phase 1 and iterate through each phase systematically!**
