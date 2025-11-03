@@ -20,7 +20,7 @@ export default function ConfirmSignup() {
         <CardContent className="space-y-4">
           <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
             <div className="flex">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-5 w-5 text-blue-400"
                   viewBox="0 0 20 20"

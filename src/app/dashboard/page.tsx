@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { SignOutButton } from '@/components/auth/sign-out-button'
+import { DocumentUpload } from '@/components/documents/DocumentUpload'
+import { ProjectForm } from '@/components/projects/ProjectForm'
+import { PodcastGenerate } from '@/components/podcasts/PodcastGenerate'
 
 export default async function Dashboard() {
   const supabase = await createClient()
@@ -155,9 +157,7 @@ export default async function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" variant="outline">
-                Upload Document
-              </Button>
+              <DocumentUpload />
             </CardContent>
           </Card>
 
@@ -169,9 +169,7 @@ export default async function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" variant="outline">
-                Create Project
-              </Button>
+              <ProjectForm />
             </CardContent>
           </Card>
 
@@ -183,9 +181,7 @@ export default async function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full" disabled>
-                Coming Soon
-              </Button>
+              <PodcastGenerate />
             </CardContent>
           </Card>
         </div>
