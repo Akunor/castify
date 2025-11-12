@@ -73,7 +73,7 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
       <Button
         onClick={handleButtonClick}
         disabled={isUploading}
-        className="w-full"
+        className="w-full cursor-pointer"
         variant="outline"
       >
         {isUploading ? 'Uploading...' : 'Upload Document'}

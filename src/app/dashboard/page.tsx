@@ -5,6 +5,7 @@ import { SignOutButton } from '@/components/auth/sign-out-button'
 import { DocumentUpload } from '@/components/documents/DocumentUpload'
 import { ProjectForm } from '@/components/projects/ProjectForm'
 import { PodcastGenerate } from '@/components/podcasts/PodcastGenerate'
+import Image from 'next/image'
 
 export default async function Dashboard() {
   const supabase = await createClient()
@@ -41,7 +42,8 @@ export default async function Dashboard() {
       <nav className="border-b border-foreground/10 bg-background">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">Castify</span>
+            <Image src="/Castify.svg" alt="Castify" width={50} height={50} />
+            <span className="text-3xl font-bold">Castify</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-sm text-foreground/60">

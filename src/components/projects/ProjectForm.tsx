@@ -69,7 +69,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="w-full"
+        className="w-full cursor-pointer"
         variant="outline"
       >
         Create Project
@@ -127,6 +127,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
                 <Button
                   type="submit"
                   disabled={isSubmitting || !name.trim()}
+                  className="cursor-pointer"
                 >
                   {isSubmitting ? 'Creating...' : 'Create Project'}
                 </Button>

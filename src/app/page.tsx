@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-
+import Image from 'next/image'
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -8,7 +8,8 @@ export default function Home() {
       <nav className="border-b border-foreground/10 bg-background/50 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">Castify</span>
+            <Image src="/Castify.svg" alt="Castify" width={50} height={50} />
+            <span className="text-3xl font-bold">Castify</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/auth/login">
@@ -160,6 +161,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <div className="flex items-center gap-2">
+              <Image src="/Castify.svg" alt="Castify" width={40} height={40} />
               <span className="text-xl font-bold">Castify</span>
             </div>
             <p className="text-sm text-foreground/60">

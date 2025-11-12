@@ -160,7 +160,7 @@ export function PodcastGenerate({ onSuccess }: PodcastGenerateProps) {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="w-full"
+        className="w-full cursor-pointer"
       >
         Generate Podcast
       </Button>
@@ -319,6 +319,7 @@ export function PodcastGenerate({ onSuccess }: PodcastGenerateProps) {
                     isSubmitting ||
                     (selectedDocumentIds.length === 0 && !selectedProjectId)
                   }
+                  className="cursor-pointer"
                 >
                   {isSubmitting ? 'Generating...' : 'Generate Podcast'}
                 </Button>
