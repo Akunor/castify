@@ -38,7 +38,7 @@ export const STORAGE_BUCKETS = {
 
 // OpenAI configuration
 export const OPENAI_CONFIG = {
-  MODEL: 'gpt-4-turbo-preview',
+  MODEL: 'gpt-4o',
   MAX_TOKENS: 4000,
   TEMPERATURE: 0.7,
   MAX_INPUT_CHARS: 400000, // ~100k tokens (1 token ≈ 4 chars)

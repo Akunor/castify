@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('documents')
-      .select('*')
+      .select('*, project_documents(project_id)')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 

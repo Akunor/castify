@@ -6,6 +6,7 @@ import { DocumentUpload } from '@/components/documents/DocumentUpload'
 import { ProjectForm } from '@/components/projects/ProjectForm'
 import { PodcastGenerate } from '@/components/podcasts/PodcastGenerate'
 import Image from 'next/image'
+import { ProjectWorkspace } from '@/components/dashboard/ProjectWorkspace'
 
 export default async function Dashboard() {
   const supabase = await createClient()
@@ -31,6 +32,7 @@ export default async function Dashboard() {
     .from('podcasts')
     .select('id')
     .eq('user_id', user.id)
+    .eq('status', 'completed')
 
   const documentsCount = documents?.length || 0
   const projectsCount = projects?.length || 0
@@ -186,6 +188,10 @@ export default async function Dashboard() {
               <PodcastGenerate />
             </CardContent>
           </Card>
+        </div>
+
+        <div className="mt-8">
+          <ProjectWorkspace />
         </div>
 
         {/* Empty State */}

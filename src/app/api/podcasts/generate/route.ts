@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { DocumentProcessorService } from '@/lib/services/documentProcessor';
 import { AIService } from '@/lib/services/aiService';
+import { STORAGE_BUCKETS } from '@/lib/utils/constants';
 import type { PodcastGenerationRequest } from '@/types/podcast';
 
 export async function POST(request: NextRequest) {
@@ -110,13 +111,18 @@ export async function POST(request: NextRequest) {
     processPodcastGeneration(podcast.id, targetDocumentIds, user.id, {
       name: podcastName,
       description: description || undefined,
-    }).catch((error) => {
+    }).catch(async (error) => {
       console.error('Background podcast generation failed:', error);
-      // Update podcast status to error
-      supabase
-        .from('podcasts')
-        .update({ status: 'error', updated_at: new Date().toISOString() })
-        .eq('id', podcast.id);
+      if (!(error as { cleanedUp?: boolean })?.cleanedUp) {
+        try {
+          await cleanupFailedPodcast(podcast.id);
+        } catch (cleanupError) {
+          console.error(
+            `Failed to clean up podcast ${podcast.id} after generation error:`,
+            cleanupError
+          );
+        }
+      }
     });
 
     return NextResponse.json(
@@ -158,7 +164,6 @@ async function processPodcastGeneration(
     // Generate podcast script using LLM
     const script = await AIService.generatePodcastScript(parsedDocuments, options);
 
-    // Update podcast with transcript
     const { error: updateError } = await supabase
       .from('podcasts')
       .update({
@@ -177,16 +182,53 @@ async function processPodcastGeneration(
   } catch (error) {
     console.error(`Error processing podcast ${podcastId}:`, error);
 
-    // Update podcast status to error
-    await supabase
-      .from('podcasts')
-      .update({
-        status: 'error',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', podcastId);
+    try {
+      await cleanupFailedPodcast(podcastId);
+    } catch (cleanupError) {
+      console.error(
+        `Failed to clean up podcast ${podcastId} after processing error:`,
+        cleanupError
+      );
+    }
 
-    throw error;
+    const failure =
+      error instanceof Error ? error : new Error('Unknown podcast generation error');
+    (failure as { cleanedUp?: boolean }).cleanedUp = true;
+    throw failure;
+  }
+}
+
+async function cleanupFailedPodcast(podcastId: string) {
+  const supabase = await createClient();
+
+  try {
+    const { data: podcast } = await supabase
+      .from('podcasts')
+      .select('audio_url')
+      .eq('id', podcastId)
+      .single();
+
+    if (podcast?.audio_url) {
+      const urlParts = podcast.audio_url.split('/');
+      const fileName = urlParts[urlParts.length - 1]?.split('?')[0];
+      if (fileName) {
+        await supabase.storage.from(STORAGE_BUCKETS.PODCASTS).remove([fileName]);
+      }
+    }
+  } catch (error) {
+    console.error(`Error fetching audio URL for cleanup of podcast ${podcastId}:`, error);
+  }
+
+  try {
+    await supabase.from('podcast_documents').delete().eq('podcast_id', podcastId);
+  } catch (error) {
+    console.error(`Error deleting podcast_documents for ${podcastId}:`, error);
+  }
+
+  try {
+    await supabase.from('podcasts').delete().eq('id', podcastId);
+  } catch (error) {
+    console.error(`Error deleting podcast ${podcastId}:`, error);
   }
 }
 
